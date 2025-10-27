@@ -7,6 +7,7 @@ workflows:
   build-and-push-image-with-container-registry-login:
     jobs:
       - aws-ecr/build_and_push_image:
+          account_id: '${AWS_ACCOUNT_ID}'
           auth:
             - aws-cli/setup:
                 role_arn: '${CIRCLECI_OIDC_ROLE_ARN}'
