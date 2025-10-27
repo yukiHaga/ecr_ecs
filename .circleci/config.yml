@@ -1,13 +1,19 @@
 version: 2.1
 orbs:
+  aws-cli: circleci/aws-cli@5.1
   aws-ecr: circleci/aws-ecr@9.7.0
-  aws-ecs: circleci/aws-ecs@7.1.0
 
 workflows:
-  build-and-deploy:
+  build-and-push-image-with-container-registry-login:
     jobs:
       - aws-ecr/build_and_push_image:
-          account-url: AWS_ECR_ACCOUNT_URL
+          auth:
+            - aws-cli/setup:
+                role_arn: '${arn:aws:iam::123456789012}'
+          container_registry_login: true
+          dockerfile: Dockerfile
+          path: .
+          region: '${AWS_REGION}'
           repo: 'nginx'
           tag: '${CIRCLE_SHA1}'
 
