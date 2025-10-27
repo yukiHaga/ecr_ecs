@@ -9,7 +9,7 @@ workflows:
       - aws-ecr/build_and_push_image:
           auth:
             - aws-cli/setup:
-                role_arn: '${arn:aws:iam::123456789012}'
+                role_arn: '${AWS_ECR_ROLE_ARN}'
           container_registry_login: true
           dockerfile: Dockerfile
           path: .
