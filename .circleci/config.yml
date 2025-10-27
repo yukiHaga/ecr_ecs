@@ -8,14 +8,15 @@ workflows:
     jobs:
       - aws-ecr/build_and_push_image:
           auth:
-            - aws-cli/setup:
-                role_arn: '${AWS_ECR_ROLE_ARN}'
+            - aws-cli/assume-role-with-web-identity:
+                role-arn: '${CIRCLECI_OIDC_ROLE_ARN}'
           container_registry_login: true
           dockerfile: Dockerfile
           path: .
           region: '${AWS_REGION}'
           repo: 'nginx'
           tag: '${CIRCLE_SHA1}'
+          context: AWS
 
       ### ECSへデプロイするジョブ
       #- aws-ecs/deploy-service-update:
