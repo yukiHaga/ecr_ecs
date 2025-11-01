@@ -29,6 +29,8 @@ workflows:
           cluster: 'circleci-book-cluster'
           container_image_name_updates: 'container=circleci-book-container,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:${CIRCLE_SHA1}'
           family: 'circleci-book-task'
+          region: '${AWS_REGION}'
+          context: AWS
 
 ### E2Eテストの例
 #version: 2
