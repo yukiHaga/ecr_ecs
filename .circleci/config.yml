@@ -20,9 +20,9 @@ workflows:
           context: AWS
 
       ### ECSへデプロイするジョブ
-      - aws-ecs/deploy-service-update:
+      - aws-ecs/deploy_service_update:
           requires:
-            - aws-ecr/build-and-push-image
+            - aws-ecr/build_and_push_image
           auth:
             - aws-cli/setup:
                 role_arn: '${CIRCLECI_OIDC_ROLE_ARN}'
