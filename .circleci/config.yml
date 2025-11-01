@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@5.1
   aws-ecr: circleci/aws-ecr@9.7.0
+  aws-ecs: circleci/aws-ecs@7.1.0
 
 workflows:
   build-and-push-image-with-container-registry-login:
@@ -19,13 +20,15 @@ workflows:
           context: AWS
 
       ### ECSへデプロイするジョブ
-      #- aws-ecs/deploy-service-update:
-      #    requires:
-      #      - aws-ecr/build-and-push-image
-      #    family: 'circleci-book-task'
-      #    service-name: 'circleci-book-service'
-      #    cluster-name: 'circleci-book-cluster'
-      #    container-image-name-updates: 'container=circleci-book-container,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:${CIRCLE_SHA1}'
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          auth:
+            - aws-cli/setup:
+                role_arn: '${CIRCLECI_OIDC_ROLE_ARN}'
+          cluster: 'circleci-book-cluster'
+          container_image_name_updates: 'container=circleci-book-container,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:${CIRCLE_SHA1}'
+          family: 'circleci-book-task'
 
 ### E2Eテストの例
 #version: 2
